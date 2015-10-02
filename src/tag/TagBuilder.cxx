@@ -203,6 +203,13 @@ TagBuilder::AddItemInternal(TagType type, const char *value, size_t length)
 		length = f.size;
 	}
 
+	for (auto i : items) {
+		if ((i->type == type) && !strcmp(i->value, value)) {
+			free(f.data);
+			return;
+		}
+	}
+
 	tag_pool_lock.lock();
 	auto i = tag_pool_get_item(type, value, length);
 	tag_pool_lock.unlock();
